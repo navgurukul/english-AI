@@ -1,39 +1,28 @@
 
 // import 'package:english_ai/const/color.dart';
-import 'package:eng_clone_2/components/article_Img.dart';
-import 'package:eng_clone_2/components/focus.dart';
-import 'package:eng_clone_2/constWidget/textWidget.dart';
-import 'package:eng_clone_2/constants/colors.dart';
-import 'package:eng_clone_2/screens/article_content.dart';
+
+import 'package:etc/components/Article.dart';
+import 'package:etc/components/Focus.dart';
+import 'package:etc/const/color.dart';
+import 'package:etc/constWidget/textwidget.dart';
 import 'package:flutter/material.dart';
 
 
 class f_MobilePage extends StatefulWidget {
 
 
-  f_MobilePage({required this.article_name_in, required this.selected_index,required this.selected_index2,required this.fontsize});
+  f_MobilePage({required this.article_name_in,required this.article_content, required this.selected_index,required this.selected_index2,required this.fontsize});
   int article_name_in;
   int selected_index;
   int selected_index2;
+  List article_content;
   double fontsize;
   @override
   State<f_MobilePage> createState() => _f_MobilePageState();
 }
 
 class _f_MobilePageState extends State<f_MobilePage> {
-  // double textsize=17;
-
-  // int selected_index=3;
-  // int selected_index2=1;
-
-  // double fontsize=10;
-
-  // int article_name_in=3;
-  // int widget.article_name_in = widget.article_name_in;
-  // int widget.selected_index = widget.selected_index;
-  // int widget.selected_index2 = widget.selected_index2;
-    // double widget.fontsize = widget.fontsize;
-
+  
   @override
   Widget build(BuildContext context) {
     
@@ -58,10 +47,10 @@ class _f_MobilePageState extends State<f_MobilePage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               // ARTICLE IMAGE
-                              Article_image(height:mq.height*0.08,width:mq.width*0.200, imgurl:articles[widget.article_name_in]['article_image']),
-                              const SizedBox(width:0),
+                              Article_image(height:mq.height*0.08,width:mq.width*0.200,),
+                              
                               //// ARTICLE NAME
-                              textwidget(articles[widget.article_name_in]['article_name'],19, FontWeight.bold, Colors.black),
+                                 Wrap( children: [textwidget( widget.article_content[widget.article_name_in].title,11, FontWeight.bold, Colors.black,),],)
 
                             ],),
 
@@ -70,7 +59,8 @@ class _f_MobilePageState extends State<f_MobilePage> {
                               children:[
 
                                 // FOCUS MODE
-                                InkWell(onTap:(){Navigator.pop(context);} ,child: Focas_container(focustext:"Exit focus Mode",height:mq.height* 0.050,width:mq.width*0.470,fontsize:14)),
+                                InkWell(onTap:(){Navigator.pop(context);},
+                                child: Focas_container(focustext:"Exit From Focus Mode",height:mq.height* 0.050,width:mq.width*0.500,fontsize:14,)),
                                 // const SizedBox(width:1),
 
                                 // INCREASING FONTSIZE
@@ -116,7 +106,7 @@ class _f_MobilePageState extends State<f_MobilePage> {
                                       child:Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children:[
-                                            textwidget("Level",15, FontWeight.bold, menu),
+                                            textwidget("Level",15, FontWeight.bold,menu),
                                             SizedBox(width:17),
 
                                             //DIFFERENT LEVEL ACCORDING TO THE NUMBERS'S  CONTAINER
@@ -154,16 +144,34 @@ class _f_MobilePageState extends State<f_MobilePage> {
 
 
                               ]),
-                          //ARTICLE CONTENT
+                          // ARTICLE CONTENT
 
                           SizedBox(height: 40,),
                           Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(20.0),
                             child: Container(
-                              child: textwidget(articles[widget.article_name_in]['versions'][widget.selected_index-1],
-                                  widget.fontsize, FontWeight.w400, Colors.black),
-                            ),
+                              child:((){
+                              if (widget.selected_index==1){
+                                return  textwidget(widget.article_content[widget.article_name_in].level1,widget.fontsize, FontWeight.w200, Colors.black,);
+                                }
+                              else if (widget.selected_index==2){
+                                return textwidget(widget.article_content[widget.article_name_in].level2,widget.fontsize, FontWeight.w200, Colors.black,);
+                              }
+                              else if (widget.selected_index==3){
+                               return textwidget(widget.article_content[widget.article_name_in].level3,widget.fontsize, FontWeight.w200, Colors.black,);
+                              }
+                              else if (widget.selected_index==4){
+                              return textwidget(widget.article_content[widget.article_name_in].level4,widget.fontsize, FontWeight.w200, Colors.black,);
+                             }
+                             else{
+                              return textwidget(widget.article_content[widget.article_name_in].level5,widget.fontsize, FontWeight.w200, Colors.black,);
+                             }
+                             
+                             })()
+                            )
                           )
+
+
 
 
                         ])

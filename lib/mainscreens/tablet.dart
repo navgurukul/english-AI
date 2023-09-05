@@ -1,7 +1,10 @@
 // import 'package:english/focus_screens/f_tablet.dart';
+import 'dart:convert';
+
+import 'package:etc/api_function/api.dart';
 import 'package:flutter/material.dart';
 
-import '../article_content.dart';
+import 'package:http/http.dart' as http;
 import '../components/Article.dart';
 import '../components/Focus.dart';
 import '../const/color.dart';
@@ -27,7 +30,38 @@ class _tabletPageState extends State<tabletPage> {
   int selected_index2=0;
 
   int article_name_in=0;
+   List<Article_Model> article_content=[];
+Future<void> fetchData() async {
+  try {
+    final response = await http.get(Uri.parse('https://merd-api.merakilearn.org/englishAi/content'));
 
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body)['articles'] as List<dynamic>;
+
+      setState(() {
+        article_content = jsonData
+            .map((data) => Article_Model.fromJson(data as Map<String, dynamic>))
+            .toList();
+      });
+
+      print(article_content);
+      print("hello");
+    } else {
+      // Handle error if the API request fails.
+      print('API request failed with status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error fetching data: $e');
+  }
+}
+
+
+
+  @override
+   void initState(){
+    super.initState();
+    fetchData();
+   }
 
 
 
@@ -53,9 +87,9 @@ class _tabletPageState extends State<tabletPage> {
                   Row(
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Article_image(height:mq.height*0.15,width:mq.width*0.20,imgurl: articles[article_name_in]['article_image']),
+                      Article_image(height:mq.height*0.15,width:mq.width*0.20,),
                       const SizedBox(width:25),
-                      textwidget(articles[article_name_in]['article_name'],40, FontWeight.bold, textcolor),
+                      textwidget(article_content[article_name_in].title,25, FontWeight.bold, textcolor),
                       //  const SizedBox(width:30)
 
                     ],),
@@ -64,7 +98,8 @@ class _tabletPageState extends State<tabletPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:[
 
-                      InkWell(onTap:(){Navigator.push(context,MaterialPageRoute(builder: (context)=>f_tabletPage(article_name_in: article_name_in, selected_index: selected_index, selected_index2: selected_index2, fontsize: textsize)));} ,child: Focas_container(focustext:"Enter Focus Mode",height:mq.height* 0.050,width:mq.width*0.300,fontsize:15)),
+                      InkWell(onTap:(){Navigator.push(context,MaterialPageRoute(builder: (context)=>f_tabletPage(article_name_in: article_name_in,article_content:article_content, selected_index: selected_index, selected_index2: selected_index2, fontsize: textsize)));} ,
+                      child: Focas_container(focustext:"Enter Focus Mode",height:mq.height* 0.050,width:mq.width*0.300,fontsize:15,)),
 
                       const SizedBox(width:150),
                       Row(
@@ -147,9 +182,25 @@ class _tabletPageState extends State<tabletPage> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Container(
-                        child: textwidget(articles[article_name_in]['versions'][selected_index-1],
-                          textsize, FontWeight.w200, Colors.black,)
-                    ),
+                        child:((){
+                              if (selected_index==1){
+                                return  textwidget(article_content[article_name_in].level1,textsize, FontWeight.w200, Colors.black,);
+                                }
+                              else if (selected_index==2){
+                                return textwidget(article_content[article_name_in].level2,textsize, FontWeight.w200, Colors.black,);
+                              }
+                              else if (selected_index==3){
+                               return textwidget(article_content[article_name_in].level3,textsize, FontWeight.w200, Colors.black,);
+                              }
+                              else if (selected_index==4){
+                              return textwidget(article_content[article_name_in].level4,textsize, FontWeight.w200, Colors.black,);
+                             }
+                             else{
+                              return textwidget(article_content[article_name_in].level5,textsize, FontWeight.w200, Colors.black,);
+                             }
+                             
+                             })()                   
+                           ),
                   )
 
                 ], ),
@@ -167,7 +218,7 @@ class _tabletPageState extends State<tabletPage> {
                   children:[
                     InkWell(
                         onTap: (){setState((){if(article_name_in>0){article_name_in--;}});}, child: Image.asset("images/left-arrow.png",height:35,width:35)),
-                    InkWell(onTap: (){setState((){if(article_name_in<4){article_name_in++;}});},child: Image.asset("images/right-arrow-black-triangle.png",height:35,width:35))
+                    InkWell(onTap: (){setState((){if(article_name_in<3){article_name_in++;}});},child: Image.asset("images/right-arrow-black-triangle.png",height:35,width:35))
                   ])),
 
 
