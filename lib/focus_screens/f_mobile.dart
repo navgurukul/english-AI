@@ -51,6 +51,7 @@ class _f_MobilePageState extends State<f_MobilePage> {
                               
                               //// ARTICLE NAME
                                  Wrap( children: [textwidget( widget.article_content[widget.article_name_in].title,11, FontWeight.bold, Colors.black,),],)
+                              // try to change it
 
                             ],),
 
