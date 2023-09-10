@@ -1,5 +1,5 @@
-// import 'package:english/screen/aap_bar.dart';
-// import 'package:english/focus_screens/f_desktop.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../article_content.dart';
 import '../components/Article.dart';
@@ -8,6 +8,8 @@ import '../const/color.dart';
 import '../constWidget/textwidget.dart';
 import '../focus_screens/f_desktop.dart';
 import 'aap_bar.dart';
+import 'package:http/http.dart' as http;
+
 
 
 
@@ -31,18 +33,60 @@ class _DesktopPageState extends State<DesktopPage> {
   double textsize=20;
 
 
-  int selected_index=3;
+  int selected_index=1;
   int article_name_in=0;
   int selected_index2=1;
 
+  List<Article_Model> article_content = [];
+  Future<void> fetchData() async {
+    try {
+
+      final response = await http.get(Uri.parse('https://merd-api.merakilearn.org/englishAi/content'));
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body)['articles'] as  List<dynamic>;
+
+        setState(() {
+          article_content =jsonData
+              .map((data) => Article_Model.fromJson(data as Map<String, dynamic>))
+              .toList();
+        });
+        print(article_content);
+        print("Hello");
+      }else {
+        // Handle error if the API request fails.
+        print('API request failed with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+  }
 
 
-
-
+  @override
+  void initState(){
+    super.initState();
+    fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
     var mq= MediaQuery.of(context).size;
+    if (article_content.isEmpty){
+
+      return const Center(child:
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Loading the data",
+            style: TextStyle(fontSize:15,color:Colors.black),),
+          SizedBox(height: 10,),
+          CircularProgressIndicator(
+            strokeWidth:0.7,
+          )
+        ],
+      ));
+    }
+    // if (article_content.isEmpty){
     return Scaffold(
       // appbar
       appBar: appbar(
@@ -66,20 +110,22 @@ class _DesktopPageState extends State<DesktopPage> {
                   children: [
 
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
 
                         // Article image
-                        Article_image(height:mq.height*0.15,width:mq.width*0.15,imgurl: articles[article_name_in]['article_image'],),
+                        Article_image(height:mq.height*0.15,width:mq.width*0.15,),
 
                         // Article name
                         const SizedBox(width:0),
-                        textwidget(articles[article_name_in]['article_name'],25, FontWeight.bold, textcolor),
+                        Flexible(child: textwidget(article_content[article_name_in].title,20, FontWeight.bold, textcolor)),
 
                         // Article in Focus mode
                         const SizedBox(width:0),
-                        InkWell(onTap:(){Navigator.push(context,MaterialPageRoute(builder:
-                            (context)=>f_DesktopPage(article_name_in: article_name_in, selected_index: selected_index, selected_index2: selected_index2, textsize: textsize)));} ,child:Focas_container(focustext:"Enter Focus Mode",height:mq.height* 0.080,width:mq.width* 0.15,fontsize:17))
+                        InkWell(onTap:(){Navigator.push(context, MaterialPageRoute(builder: ((context) => f_DesktopPage(article_name_in: article_name_in, selected_index: selected_index, article_content: article_content, selected_index2: selected_index2, textsize: textsize))));},
+                            child:Focas_container(focustext:"Enter to focus Mode",height:mq.height* 0.080,width:mq.width* 0.15,fontsize:15,))
+                        // InkWell(onTap:(){Navigator.push(context,MaterialPageRoute(builder:
+                        //     (context)=>f_DesktopPage(article_name_in: article_name_in, selected_index: selected_index, selected_index2: selected_index2, textsize: textsize)));} ,child:Focas_container(focustext:"Enter Focus Mode",height:mq.height* 0.080,width:mq.width* 0.15,fontsize:17))
 
                       ],),
 
@@ -158,9 +204,29 @@ class _DesktopPageState extends State<DesktopPage> {
                     Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Container(
-                            child: textwidget(articles[article_name_in]['versions'][selected_index-1],
-                                textsize, FontWeight.w300,Colors.black))
-                    ),
+    child:((){
+    if (selected_index==1){
+    return  textwidget(article_content[article_name_in].level1,textsize, FontWeight.w200, Colors.black,);
+    }
+    else if (selected_index==2){
+    return textwidget(article_content[article_name_in].level2,textsize, FontWeight.w200, Colors.black,);
+    }
+    else if (selected_index==3){
+    return textwidget(article_content[article_name_in].level3,textsize, FontWeight.w200, Colors.black,);
+    }
+    else if (selected_index==4){
+    return textwidget(article_content[article_name_in].level4,textsize, FontWeight.w200, Colors.black,);
+    }
+    else{
+    return textwidget(article_content[article_name_in].level5,textsize, FontWeight.w200, Colors.black,);
+    }
+
+    })()
+                          ),
+                            // child: textwidget(articles[article_name_in]['versions'][selected_index-1],
+                            //     textsize, FontWeight.w300,Colors.black)
+                        )
+
 
                   ],
                 ),

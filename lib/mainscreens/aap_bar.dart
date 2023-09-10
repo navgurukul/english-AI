@@ -1,8 +1,11 @@
 
+import 'package:etc/mainscreens/signIn.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../const/color.dart';
+import '../main.dart';
 
 
 class appbar extends StatelessWidget implements PreferredSizeWidget {
@@ -94,9 +97,35 @@ class appbar extends StatelessWidget implements PreferredSizeWidget {
 
                                 } else if (value == 'signout') {
 
-                                }
-                              },
+                                  final _googleSignIn = GoogleSignIn();
+                                  Future<void> GoogleSignOut() async {
+                                    try {
+                                      await _googleSignIn.signOut();
 
+                                      // Use Navigator.pushReplacement to navigate to the sign-in page and remove the current page from the stack.
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => GoogleSignInPage(),
+                                        ),
+                                      );
+                                    } catch (error) {
+                                      print("Error signing out: $error");
+                                    }
+                                  }
+                                  GoogleSignOut();
+                                    // final _googleSignIn = GoogleSignIn();
+                                    // Future<void> GoogleSignOut() async {
+                                    // try {
+                                    // await _googleSignIn.signOut();
+                                    //
+                                    // Navigator.push(context ,MaterialPageRoute(builder: (context) => googleSignIn()));
+                                    // } catch (error) {
+                                    // print("Error signing out: $error");
+                                    // }
+                                    // }
+
+                                  }},
 
                               itemBuilder: (BuildContext context) {
                                 return [
