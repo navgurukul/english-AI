@@ -250,7 +250,7 @@ class _MobilePageState extends State<MobilePage> {
                   children:[
                     InkWell(
                         onTap: (){setState((){if(article_name_in>0){article_name_in--;}});}, child: Image.asset("images/left-arrow.png",height:35,width:35)),
-                    InkWell(onTap: (){setState((){if(article_name_in<4){article_name_in++;}});},child: Image.asset("images/right-arrow-black-triangle.png",height:35,width:35))
+                    InkWell(onTap: (){setState((){if(article_name_in<3){article_name_in++;}});},child: Image.asset("images/right-arrow-black-triangle.png",height:35,width:35))
                   ])),
         ],)
     );
