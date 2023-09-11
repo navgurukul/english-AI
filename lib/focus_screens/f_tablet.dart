@@ -1,18 +1,28 @@
-import 'package:eng_clone_2/components/article_Img.dart';
-import 'package:eng_clone_2/components/focus.dart';
-import 'package:eng_clone_2/constWidget/textWidget.dart';
-import 'package:eng_clone_2/constants/colors.dart';
-import 'package:eng_clone_2/screens/article_content.dart';
+// import 'package:eng_clone_2/components/article_Img.dart';
+// import 'package:eng_clone_2/components/focus.dart';
+// import 'package:eng_clone_2/constWidget/textWidget.dart';
+// import 'package:eng_clone_2/constants/colors.dart';
+// import 'package:eng_clone_2/screens/article_content.dart';
 import 'package:flutter/material.dart';
+
+import '../article_content.dart';
+import '../components/Article.dart';
+import '../components/Focus.dart';
+import '../const/color.dart';
+import '../constWidget/textwidget.dart';
 
 
 class f_tabletPage extends StatefulWidget {
 
 
-  f_tabletPage({required this.article_name_in, required this.selected_index,required this.selected_index2,required this.fontsize});
+  f_tabletPage({required this.article_name_in,required this.article_content, required this.selected_index,required this.selected_index2,required this.fontsize});
+
+  // f_tabletPage({required this.article_name_in, required this.selected_index,required this.selected_index2,required this.fontsize, required List<Article_Model> article_content});
   int article_name_in;
   int selected_index;
   int selected_index2;
+  List article_content;
+
   double fontsize;
   @override
   State<f_tabletPage> createState() => _f_tabletPageState();
@@ -43,9 +53,9 @@ class _f_tabletPageState extends State<f_tabletPage> {
                   Row(
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Article_image(height:mq.height*0.15,width:mq.width*0.20,imgurl: articles[widget.article_name_in]['article_image']),
+                      Article_image(height:mq.height*0.15,width:mq.width*0.20,),
                       const SizedBox(width:25),
-                      textwidget(articles[widget.article_name_in]['article_name'],40, FontWeight.bold, textcolor),
+                      Flexible(child: textwidget(widget.article_content[widget.article_name_in].title,40, FontWeight.bold, textcolor)),
                       //  const SizedBox(width:30)
 
                     ],),
@@ -53,7 +63,10 @@ class _f_tabletPageState extends State<f_tabletPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:[
-                      InkWell(onTap:(){Navigator.pop(context);},child:Focas_container(focustext:"Exit focus Mode",height:mq.height* 0.080,width:mq.width*0.310,fontsize:28),),
+                      InkWell(onTap:(){Navigator.pop(context);},
+                          child: Focas_container(focustext:"Exit from Focus Mode",height:mq.height* 0.060,width:mq.width*0.300,fontsize:15,)),
+
+                      // InkWell(onTap:(){Navigator.pop(context);},child:Focas_container(focustext:"Exit focus Mode",height:mq.height* 0.080,width:mq.width*0.310,fontsize:28),),
                       const SizedBox(width:150),
                       Row(
                           children:[
@@ -133,12 +146,35 @@ class _f_tabletPageState extends State<f_tabletPage> {
                   // ARTICLE CONTENT
 
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                        child: textwidget(articles[widget.article_name_in]['versions'][widget.selected_index-1],
-                            widget.fontsize, FontWeight.w200, Colors.black)
-                    ),
+                      padding: const EdgeInsets.all(20.0),
+                      child: Container(
+                          child:((){
+                            if (widget.selected_index==1){
+                              return  textwidget(widget.article_content[widget.article_name_in].level1,widget.fontsize, FontWeight.w200, Colors.black,);
+                            }
+                            else if (widget.selected_index==2){
+                              return textwidget(widget.article_content[widget.article_name_in].level2,widget.fontsize, FontWeight.w200, Colors.black,);
+                            }
+                            else if (widget.selected_index==3){
+                              return textwidget(widget.article_content[widget.article_name_in].level3,widget.fontsize, FontWeight.w200, Colors.black,);
+                            }
+                            else if (widget.selected_index==4){
+                              return textwidget(widget.article_content[widget.article_name_in].level4,widget.fontsize, FontWeight.w200, Colors.black,);
+                            }
+                            else{
+                              return textwidget(widget.article_content[widget.article_name_in].level5,widget.fontsize, FontWeight.w200, Colors.black,);
+                            }
+
+                          })()
+                      )
                   )
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10.0),
+                  //   child: Container(
+                  //       child: textwidget(articles[widget.article_name_in]['versions'][widget.selected_index-1],
+                  //           widget.fontsize, FontWeight.w200, Colors.black)
+                  //   ),
+                  // )
 
                 ], ),
 

@@ -1,19 +1,30 @@
-// import 'package:english/screen/aap_bar.dart';
-import 'package:eng_clone_2/components/article_Img.dart';
-import 'package:eng_clone_2/components/focus.dart';
-import 'package:eng_clone_2/constWidget/textWidget.dart';
-import 'package:eng_clone_2/constants/colors.dart';
-import 'package:eng_clone_2/screens/article_content.dart';
+// // import 'package:english/screen/aap_bar.dart';
+// import 'package:eng_clone_2/components/article_Img.dart';
+// import 'package:eng_clone_2/components/focus.dart';
+// import 'package:eng_clone_2/constWidget/textWidget.dart';
+// import 'package:eng_clone_2/constants/colors.dart';
+// import 'package:eng_clone_2/screens/article_content.dart';
 import 'package:flutter/material.dart';
+
+import '../article_content.dart';
+import '../components/Article.dart';
+import '../components/Focus.dart';
+import '../const/color.dart';
+import '../constWidget/textwidget.dart';
 
 
 class f_DesktopPage extends StatefulWidget {
 
 
-  f_DesktopPage({required this.article_name_in, required this.selected_index,required this.selected_index2,required this.textsize});
+  // f_DesktopPage({required this.article_name_in, required this.selected_index,required this.selected_index2,required this.textsize, required List<Article_Model> article_content});
+  f_DesktopPage({required this.article_name_in, required this.selected_index,required this.article_content,required this.selected_index2,required this.textsize});
+
   int article_name_in;
+
   int selected_index;
   int selected_index2;
+  List<Article_Model> article_content;
+
   double textsize;
   @override
   State<f_DesktopPage> createState() => _f_DesktopPageState();
@@ -24,14 +35,6 @@ class _f_DesktopPageState extends State<f_DesktopPage> {
   // Color btn_col=Colors.white;
 
   Color btn_col = Colors.white;
- 
-  // int articleIndex = widget.article_name_in;
-  //   int widget.selected_index = widget.selected_index;
-  //   int widget.selected_index2 = widget.selected_index2;
-  // double widget.textsize = textsize;
-
-
-
 
 
   @override
@@ -61,17 +64,20 @@ class _f_DesktopPageState extends State<f_DesktopPage> {
                       children: [
 
                         // Article image
-                        Article_image(height:mq.height*0.15,width:mq.width*0.15,imgurl:articles[widget.article_name_in]['article_image']),
+                        Article_image(height:mq.height*0.15,width:mq.width*0.15,),
 
                         // Article name
                         const SizedBox(width:0),
-                        textwidget(articles[widget.article_name_in]['article_name'],25, FontWeight.bold, textcolor),
+                        Flexible(child: textwidget(widget.article_content[widget.article_name_in].title,25, FontWeight.bold, textcolor)),
 
                         // Article in Focus mode
                         const SizedBox(width:0),
-                        InkWell(onTap:(){Navigator.pop(context);},child:Focas_container(focustext:"Exit focus Mode",height:mq.height* 0.080,width:mq.width* 0.15,fontsize:17))
+                        // InkWell(onTap:(){Navigator.pop(context);},child:Focas_container(focustext:"Exit focus Mode",height:mq.height* 0.080,width:mq.width* 0.15,fontsize:17))
 
-                      ],),
+                        InkWell(onTap:(){Navigator.pop(context);},
+                            child:Focas_container(focustext:"Exit from focus Mode",height:mq.height* 0.080,width:mq.width* 0.15,fontsize:17,))                      ],),
+
+
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -144,25 +150,38 @@ class _f_DesktopPageState extends State<f_DesktopPage> {
 
                       ],),
                     SizedBox(height:30),
-                    // Article content
-                    Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                            child: textwidget(articles[widget.article_name_in]['versions'][widget.selected_index-1],
-                                widget.textsize, FontWeight.w300,Colors.black))
-                    ),
+                Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                        child:((){
+                          if (widget.selected_index==1){
+                            return  textwidget(widget.article_content[widget.article_name_in].level1,widget.textsize, FontWeight.w200, Colors.black,);
+                          }
+                          else if (widget.selected_index==2){
+                            return textwidget(widget.article_content[widget.article_name_in].level2,widget.textsize, FontWeight.w200, Colors.black,);
+                          }
+                          else if (widget.selected_index==3){
+                            return textwidget(widget.article_content[widget.article_name_in].level3,widget.textsize, FontWeight.w200, Colors.black,);
+                          }
+                          else if (widget.selected_index==4){
+                            return textwidget(widget.article_content[widget.article_name_in].level4,widget.textsize, FontWeight.w200, Colors.black,);
+                          }
+                          else{
+                            return textwidget(widget.article_content[widget.article_name_in].level5,widget.textsize, FontWeight.w200, Colors.black,);
+                          }
 
-                  ],
-                ),
-              ),
-            ),
-          ),
+                        })()
+                    )
 
-          // Container(height: 60,width:mq.width
-          //     ,child:bottomScreen(article_name_in:article_name_in)),
-
-        ],
-      ),
+              )
+              ]
+    )
+    )
+    )
+    )
+    ]
+      )
     );
+
   }
 }
