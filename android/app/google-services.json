@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "547858986996",
+    "project_id": "sapna-658d9",
+    "storage_bucket": "sapna-658d9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:547858986996:android:e981d313f0cbba0e36eba1",
+        "android_client_info": {
+          "package_name": "com.example.etc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxZaVKwuZQQ7BMm9Dy_U0OKbcUkE6qjNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

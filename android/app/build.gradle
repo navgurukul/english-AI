@@ -2,6 +2,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
 }
 
 def localProperties = new Properties()
@@ -22,18 +23,20 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+//apply plugin: 'com.google.gms.google-services'
+
 android {
     namespace "com.example.etc"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     sourceSets {
@@ -45,10 +48,20 @@ android {
         applicationId "com.example.etc"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21
+        targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
+    }
+    signingConfigs {
+        debug {
+            keyAlias 'uploadkeystore21'
+            keyPassword 'android'
+            storeFile file('upload-keystore21.jks')
+            storePassword 'android'
+        }
+
     }
 
     buildTypes {
@@ -64,4 +77,11 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+
+//apply plugin: 'com.android.application'
+dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    implementation("com.google.firebase:firebase-analytics")
+}
+
+//apply plugin: 'com.google.gms:google-services'
