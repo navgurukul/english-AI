@@ -3,7 +3,7 @@ name: On Website Deploy
   push:
     # (1)
     branches:
-      - "main"
+      - "workflow_updatecode"
 jobs:
   build_and_deploy_web:
     name: Build & Deploy Flutter to Web
