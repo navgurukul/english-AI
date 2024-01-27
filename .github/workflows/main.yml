@@ -17,7 +17,7 @@ jobs:
           channel: "stable"
 
       - name: 🌍 Enable Web
-        run: flutter config --enable-web  --no-animations
+        run: flutter config --enable-web  --no-cli-animations
 
       - name: 📦 Get packages
         run: flutter pub get
